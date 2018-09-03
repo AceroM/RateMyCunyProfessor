@@ -1,6 +1,13 @@
 # RateMyCunyProfessor
 ![logo](https://image.ibb.co/f9m4sz/icon128.png)
+
 Chrome extension for CunyFirst website that lets you view teacher's rate my professor profile straight from the class search menu
+
+## Pictures
+
+![picture1](https://image.ibb.co/fbmyKe/Screen_Shot_2018_09_03_at_10_22_32_AM.png)
+
+Next to the teachers name will be the rating of the teacher, and then in another tab is a link where you can open their profile
 
 ## features to add / bugs need to fix
 
