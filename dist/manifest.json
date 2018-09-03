@@ -1,0 +1,34 @@
+{
+  "name": "rate my CUNY professor",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "Displays RateMyProfessor stats on cunyfirst",
+  "author": "Miguel Acero <https://github.com/AceroM>",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "browser_action": {
+    "default_icon": "icons/icon48.png"
+  },
+  "background": {
+    "scripts": ["./jquery.js"]
+  },
+  "permissions": [
+    "storage",
+    "http://www.ratemyprofessors.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://*.cunyfirst.cuny.edu/*"],
+      "js": [
+        "jquery.js",
+        "bundle.js",
+        "chart.min.js"
+      ],
+      "css": ["styles.css"],
+      "all_frames": true
+    }
+  ]
+}
