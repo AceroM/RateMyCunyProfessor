@@ -1,6 +1,8 @@
 # RateMyCunyProfessor
+![logo](https://image.ibb.co/f9m4sz/icon128.png)
+Chrome extension for CunyFirst website that lets you view teacher's rate my professor profile straight from the class search menu
 
-##features to add / bugs need to fix
+## features to add / bugs need to fix
 
 * IMPORTANT: make the script persistent, so that it injects process page everytime it finds the classnames; as it is the user has to reload the page everytime
 
