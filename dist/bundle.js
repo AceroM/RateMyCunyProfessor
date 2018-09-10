@@ -86,7 +86,7 @@ const fetchTeacherName = async name => {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__processPage__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__processPage__ = __webpack_require__(2);
 // import processPage from './process-page'
 
 
@@ -95,254 +95,34 @@ const run = () => {
     var iframe = document.querySelector('#ptifrmtgtframe');
     if (iframe != null) {
       var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-      // var iframeContent = iframeDocument.querySelectorAll('[title="View Details"]')[0].textContent;
       var iframeContent = iframeDocument.querySelectorAll("[id='MTG_INSTR$0']");
       if (iframeContent && iframeContent.length > 0) {
         clearInterval(loop);
-        // console.log(iframeContent[0].textContent)
-        Object(__WEBPACK_IMPORTED_MODULE_0__processPage__["a" /* default */])(iframeDocument);
+        setInterval(() => {
+          var bookStoreText = iframeDocument.querySelectorAll(`[id="SSR_CLSRCH_MTG1$srt12$0"]`);
+          if (bookStoreText[0].innerHTML != "RateMyProfessor") Object(__WEBPACK_IMPORTED_MODULE_0__processPage__["a" /* default */])(iframeDocument);
+        }, 2000);
       }
     } else {
       // console.log(iframeContent);
     }
-  }, 2500);
+  }, 1500);
 };
 
-const handleNavigation = () => {
-  // const pageContainer = document.getElementById('js-repo-pjax-container')
-  // var iframe = document.querySelector('#ptifrmtgtframe');
-  // var iframe = document.getElementById('ptifrmtgtframe');
-  // var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-  const pageContainer = document.querySelectorAll("[id='MTG_INSTR$0']");
-  var iframeDocument = pageContainer.contentDocument || pageContainer.contentWindow.document;
-  if (!pageContainer || pageContainer.length == 0) {
-    window.setTimeout(handleNavigation, 1000);
-    return;
-  }
-
-  const observer = new MutationObserver(mutations => {
-    for (const mutation of mutations) {
-      console.log(mutation.addedNodes[0]);
-      if (mutation.addedNodes.length > 0) {
-        console.log(iframeDocument);
-        console.log(pageContainer);
-        Object(__WEBPACK_IMPORTED_MODULE_0__processPage__["a" /* default */])(iframeDocument);
-      }
-      // for (const addedNode of mutation.addedNodes) {
-      // if (addedNode.classList.contains('pagehead')) {
-      // break
-      // }
-      // }
-    }
-  });
-  observer.observe(pageContainer[0], { childList: true, attributes: true });
-};
-
-if (!process || !process.env || process.env.NODE_ENV !== 'test') {
-  run();
-}
+run();
 
 /* harmony default export */ __webpack_exports__["default"] = (run);
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__renderContent__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__renderContent__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__get_teacher_name_fetchTeacherName__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__get_teacher_name_fetchTeacherData__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__get_teacher_name_fetchTeacherData__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classInfo__ = __webpack_require__(5);
+
 
 
 
@@ -350,22 +130,22 @@ process.umask = function() { return 0; };
 const processPage = async doc => {
     var iframe = document.querySelector('#ptifrmtgtframe');
     var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-    // console.log(doc);
     var ttUnParsed = doc.querySelectorAll(".SSSGROUPBOX")[0].textContent.split(' ')[0];
+    console.log(ttUnParsed);
     var totalTeachers = parseInt(ttUnParsed);
-    var teacherArr = [];
     for (let i = 0; i < totalTeachers; i++) {
         var iframeContent = iframeDocument.querySelectorAll(`[id="MTG_INSTR$${i}"]`);
         var teach = doc.querySelectorAll(`[id="MTG_INSTR$${i}"]`);
         var button = doc.querySelectorAll(`[id="win0divBOOKSTORE_LINK$${i}"]`);
         var bookStoreText = doc.querySelectorAll(`[id="SSR_CLSRCH_MTG1$srt12$${i}"]`);
         bookStoreText[0].innerHTML = "RateMyProfessor";
-        // SSR_CLSRCH_MTG1$srt12$ 
         var name = teach[0].textContent;
         if (name == "Staff") continue;
+        var classInfo = await Object(__WEBPACK_IMPORTED_MODULE_3__classInfo__["a" /* default */])("MTG_CLASSNAME", i);
         var webBody = await Object(__WEBPACK_IMPORTED_MODULE_1__get_teacher_name_fetchTeacherName__["a" /* default */])(name);
         var data = await Object(__WEBPACK_IMPORTED_MODULE_2__get_teacher_name_fetchTeacherData__["a" /* default */])(webBody);
         console.log(data);
+        console.log(classInfo);
         const li = document.createElement('p');
         li.className = "ratings";
         if (data[0]) li.innerText = `rating: ${data[0]}/5`;else li.innerText = 'unavailable';
@@ -382,23 +162,24 @@ const processPage = async doc => {
         // }
         rmp.innerText = "open profile";
         button[0].appendChild(rmp);
-        // teacherArr.push(school);
     }
-    // console.log(teacherArr)
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (processPage);
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-const renderContent = num => {
+const renderContent = (content, type) => {
+    if (type == 'rating') {
+        const rate = document.createElement('a');
+    }
     const li = document.createElement('li');
     li.className = "ratings";
     li.innerHTML = `
-        <li> ${num} </li>
+        <li> </li>
     `;
     return li;
 };
@@ -406,7 +187,7 @@ const renderContent = num => {
 /* unused harmony default export */ var _unused_webpack_default_export = (renderContent);
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -443,6 +224,26 @@ const fetchTeacherData = async body => {
 
 /* harmony default export */ __webpack_exports__["a"] = (fetchTeacherData);
 
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+async function retrieveInfo(classStr, number) {
+    // MTG_CLASSNAME$2
+    var resp = await fetch("https://hrsa.cunyfirst.cuny.edu/psc/cnyhcprd/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.SSR_SSENRL_CART.GBL", {
+        "credentials": "same-origin",
+        "referrer": "https://hrsa.cunyfirst.cuny.edu/psc/cnyhcprd/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.SSR_SSENRL_CART.GBL?Page=SSR_SSENRL_CART&Action=A&ExactKeys=Y&TargetFrameName=None",
+        "referrerPolicy": "no-referrer-when-downgrade",
+        "body": "ICAJAX=1&ICNAVTYPEDROPDOWN=1&ICType=Panel&ICElementNum=0&ICStateNum=32&ICAction=" + classStr + "%24" + number + "&ICXPos=0&ICYPos=505.6000061035156&ResponsetoDiffFrame=-1&TargetFrameName=None&FacetPath=None&ICFocus=&ICSaveWarningFilter=0&ICChanged=-1&ICAutoSave=0&ICResubmit=0&ICSID=WhDgZ7SB75eR5qWXtRV0inLLgTdHKVQ4Ryr%2B2SDamF4%3D&ICActionPrompt=false&ICBcDomData=C~HC_SSR_SSENRL_CART_GBL~EMPLOYEE~HRMS~SA_LEARNER_SERVICES.SSR_SSENRL_CART.GBL~UnknownValue~Enrollment%3A%20%20Add%20Classes~UnknownValue~UnknownValue~https%3A%2F%2Fhome.cunyfirst.cuny.edu%2Fpsp%2Fcnyepprd%2FEMPLOYEE%2FHRMS%2Fc%2FSA_LEARNER_SERVICES.SSR_SSENRL_CART.GBL~UnknownValue*C~HC_SSS_STUDENT_CENTER~EMPLOYEE~HRMS~SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL~UnknownValue~Student%20Center~UnknownValue~UnknownValue~https%3A%2F%2Fhome.cunyfirst.cuny.edu%2Fpsp%2Fcnyepprd%2FEMPLOYEE%2FHRMS%2Fc%2FSA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL~UnknownValue&ICFind=&ICAddCount=&ICAPPCLSDATA=&DERIVED_SSTSNAV_SSTS_MAIN_GOTO$7$=9999&DERIVED_SSTSNAV_SSTS_MAIN_GOTO$8$=9999&ptus_defaultlocalnode=PSFT_CNYHCPRD&ptus_dbname=CNYHCPRD&ptus_portal=EMPLOYEE&ptus_node=HRMS&ptus_workcenterid=&ptus_componenturl=https%3A%2F%2Fhrsa.cunyfirst.cuny.edu%2Fpsp%2Fcnyhcprd%2FEMPLOYEE%2FHRMS%2Fc%2FSA_LEARNER_SERVICES.SSR_SSENRL_CART.GBL",
+        "method": "POST",
+        "mode": "cors"
+    });
+    var body = await resp.text();
+    return body;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (retrieveInfo);
+
 /***/ })
 /******/ ]);
-//# sourceMappingURL=bundle.js.map

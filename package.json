@@ -5,11 +5,15 @@
     "babel-loader": "7.1.2",
     "babel-plugin-transform-es2015-modules-commonjs": "6.26.0",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
+    "copy-webpack-plugin": "^4.5.2",
     "jest": "21.2.1",
     "webpack": "3.6.0"
   },
   "scripts": {
     "build": "webpack",
     "test": "jest"
+  },
+  "dependencies": {
+    "zip-webpack-plugin": "^3.0.0"
   }
 }

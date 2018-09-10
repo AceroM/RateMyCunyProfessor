@@ -15,5 +15,7 @@ module.exports = {
       }
     ]
   },
-  devtool: 'source-map'
+  // entry: './src/popup.html',
+  // output: {
+  // }
 }

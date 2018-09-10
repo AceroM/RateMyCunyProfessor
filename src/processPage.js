@@ -1,26 +1,27 @@
 import renderContent from './renderContent';
 import fetchTeacherName from './get-teacher-name/fetchTeacherName';
 import fetchTeacherData from './get-teacher-name/fetchTeacherData';
+import retrieveInfo from './classInfo'
 
 const processPage = async (doc) => {
     var iframe = document.querySelector('#ptifrmtgtframe');
     var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-    // console.log(doc);
     var ttUnParsed = doc.querySelectorAll(".SSSGROUPBOX")[0].textContent.split(' ')[0];
+    console.log(ttUnParsed);
     var totalTeachers = parseInt(ttUnParsed);
-    var teacherArr = [];
     for(let i = 0; i < totalTeachers; i++) {
         var iframeContent = iframeDocument.querySelectorAll(`[id="MTG_INSTR$${i}"]`);
         var teach = doc.querySelectorAll(`[id="MTG_INSTR$${i}"]`);
         var button = doc.querySelectorAll(`[id="win0divBOOKSTORE_LINK$${i}"]`);
         var bookStoreText = doc.querySelectorAll(`[id="SSR_CLSRCH_MTG1$srt12$${i}"]`);
         bookStoreText[0].innerHTML = "RateMyProfessor"
-        // SSR_CLSRCH_MTG1$srt12$ 
         var name = teach[0].textContent;
         if (name == "Staff") continue;
+        var classInfo = await retrieveInfo("MTG_CLASSNAME", i);
         var webBody = await fetchTeacherName(name);
         var data = await fetchTeacherData(webBody);
         console.log(data)
+        console.log(classInfo)
         const li = document.createElement('p')
         li.className = "ratings";
         if (data[0])
@@ -39,9 +40,7 @@ const processPage = async (doc) => {
         // }
         rmp.innerText = "open profile";
         button[0].appendChild(rmp);
-        // teacherArr.push(school);
     }
-    // console.log(teacherArr)
 }
 
 export default processPage

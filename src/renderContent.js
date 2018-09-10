@@ -1,8 +1,11 @@
-const renderContent = (num) => {
+const renderContent = (content, type) => {
+    if (type == 'rating') {
+        const rate = document.createElement('a');
+    }
     const li = document.createElement('li')
     li.className = "ratings";
     li.innerHTML = `
-        <li> ${num} </li>
+        <li> </li>
     `
     return li
 }
