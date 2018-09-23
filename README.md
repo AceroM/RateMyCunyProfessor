@@ -1,14 +1,12 @@
 # RateMyCunyProfessor
 ![logo](https://image.ibb.co/f9m4sz/icon128.png)
-    chrome extension that helps view RMP data while on cuny first class search
+
+Chrome extension that helps view RMP data while on cuny first class search
 
 ## Warning
 
-    Scraping RMP Data is against RMP policy and is **PROHIBITED**. this repository is only for **EDUCATIONAL PURPOSES** only.
-
-    Thank you very much.
-
-Chrome extension for CunyFirst website that lets you view teacher's rate my professor profile straight from the class search menu
+Scraping RMP Data is against RMP policy and is **PROHIBITED**. this repository is only for **EDUCATIONAL PURPOSES** only.
+Thank you very much.
 
 ## Pictures
 
@@ -26,6 +24,6 @@ npm build
 3. Click "Load unpacked"
 4. Load the dist folder that has recently been built.
 
-##features to add / bugs need to fix
+## Features to add / bugs need to fix
 
 * Add an option to style cunyfirst with themes
