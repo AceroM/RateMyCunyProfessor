@@ -15,12 +15,8 @@ Next to the teachers name will be the rating of the teacher, and then in another
 
 ## Installation
 
-1.
-```{r, engine='bash', count_lines}
-npm build
-```
-
-2. Go to chrome://extensions
+1. `npm build`
+2. Go to `chrome://extensions`
 3. Click "Load unpacked"
 4. Load the dist folder that has recently been built.
 
