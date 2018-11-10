@@ -1,0 +1,119 @@
+{
+	"scheduleTitle": "",
+	"courses": [{
+		"title": "CSCI 340",
+		"meetingTimes": [{
+			"startHour": 1,
+			"startMinute": 10,
+			"startIsAM": false,
+			"endHour": 2,
+			"endMinute": 25,
+			"endIsAM": false,
+			"meetsOnMonday": true,
+			"meetsOnTuesday": false,
+			"meetsOnWednesday": false,
+			"meetsOnThursday": true,
+			"meetsOnFriday": false,
+			"meetsOnSaturday": false,
+			"meetsOnSunday": false,
+			"classType": "",
+			"location": "",
+			"instructor": ""
+		}],
+		"color": "#FFE37D",
+		"SAVE_VERSION": 3,
+		"DATA_CHECK": "69761aa6-de4c-4013-b455-eb2a91fb2b76"
+	}, {
+		"title": "jpn 301",
+		"meetingTimes": [{
+			"startHour": 2,
+			"startMinute": 45,
+			"startIsAM": false,
+			"endHour": 4,
+			"endMinute": 0,
+			"endIsAM": false,
+			"meetsOnMonday": true,
+			"meetsOnTuesday": false,
+			"meetsOnWednesday": false,
+			"meetsOnThursday": true,
+			"meetsOnFriday": false,
+			"meetsOnSaturday": false,
+			"meetsOnSunday": false,
+			"classType": "",
+			"location": "",
+			"instructor": ""
+		}],
+		"color": "#C8F7C5",
+		"SAVE_VERSION": 3,
+		"DATA_CHECK": "69761aa6-de4c-4013-b455-eb2a91fb2b76"
+	}, {
+		"title": "GERMN 241",
+		"meetingTimes": [{
+			"startHour": 8,
+			"startMinute": 10,
+			"startIsAM": true,
+			"endHour": 9,
+			"endMinute": 25,
+			"endIsAM": true,
+			"meetsOnMonday": false,
+			"meetsOnTuesday": true,
+			"meetsOnWednesday": false,
+			"meetsOnThursday": false,
+			"meetsOnFriday": true,
+			"meetsOnSaturday": false,
+			"meetsOnSunday": false,
+			"classType": "",
+			"location": "",
+			"instructor": ""
+		}],
+		"color": "#E08283",
+		"SAVE_VERSION": 3,
+		"DATA_CHECK": "69761aa6-de4c-4013-b455-eb2a91fb2b76"
+	}, {
+		"title": "CSCI 265",
+		"meetingTimes": [{
+			"startHour": 9,
+			"startMinute": 45,
+			"startIsAM": true,
+			"endHour": 11,
+			"endMinute": 0,
+			"endIsAM": true,
+			"meetsOnMonday": false,
+			"meetsOnTuesday": true,
+			"meetsOnWednesday": false,
+			"meetsOnThursday": false,
+			"meetsOnFriday": true,
+			"meetsOnSaturday": false,
+			"meetsOnSunday": false,
+			"classType": "",
+			"location": "",
+			"instructor": ""
+		}],
+		"color": "#99CCCC",
+		"SAVE_VERSION": 3,
+		"DATA_CHECK": "69761aa6-de4c-4013-b455-eb2a91fb2b76"
+	}, {
+		"title": "WGS",
+		"meetingTimes": [{
+			"startHour": 7,
+			"startMinute": 0,
+			"startIsAM": false,
+			"endHour": 8,
+			"endMinute": 15,
+			"endIsAM": false,
+			"meetsOnMonday": false,
+			"meetsOnTuesday": true,
+			"meetsOnWednesday": false,
+			"meetsOnThursday": true,
+			"meetsOnFriday": false,
+			"meetsOnSaturday": false,
+			"meetsOnSunday": false,
+			"classType": "",
+			"location": "",
+			"instructor": ""
+		}],
+		"color": "#CC99CC",
+		"SAVE_VERSION": 3,
+		"DATA_CHECK": "69761aa6-de4c-4013-b455-eb2a91fb2b76"
+	}]
+}
