@@ -1,6 +1,6 @@
 {
-  "name": "rate my CUNY professor",
-  "version": "1.0.0",
+  "name": "Rate My Cuny Professor",
+  "version": "1.1.0",
   "manifest_version": 2,
   "description": "Displays RateMyProfessor stats on cunyfirst",
   "author": "Miguel Acero <https://github.com/AceroM>",

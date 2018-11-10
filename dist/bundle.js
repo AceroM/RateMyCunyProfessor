@@ -100,10 +100,12 @@ const run = () => {
       var iframeContent = iframeDocument.querySelectorAll("[id='MTG_INSTR$0']");
       // var shoppingCart = iframeDocument.querySelectorAll("[id='win0divDERIVED_REGFRM1_GROUP6GP']");
       var schedule = iframeDocument.querySelectorAll("[id='win0divSTDNT_WEEK_SCHDGP$0']");
+      var enrollCart = iframeDocument.querySelectorAll("[id='STDNT_ENRL_SSVW$scroll$0'");
       // var iframeHTML = iframeDocument.body.innerHTML;
       if (schedule) {
-        clearInterval(loop);
-        Object(__WEBPACK_IMPORTED_MODULE_1__schedule__["a" /* default */])(iframeDocument);
+        if (iframeDocument.getElementById('exportSchedule') == null) Object(__WEBPACK_IMPORTED_MODULE_1__schedule__["a" /* default */])(iframeDocument, "schedule");
+      } else if (enrollCart) {
+        Object(__WEBPACK_IMPORTED_MODULE_1__schedule__["a" /* default */])(iframeDocument, "enrolled");
       } else if (iframeContent && iframeContent.length > 0) {
         clearInterval(loop);
         setInterval(() => {
@@ -111,8 +113,6 @@ const run = () => {
           if (bookStoreText[0].innerHTML != "RateMyProfessor") Object(__WEBPACK_IMPORTED_MODULE_0__processPage__["a" /* default */])(iframeDocument);
         }, 2000);
       }
-    } else {
-      // console.log(iframeContent);
     }
   }, 1500);
 };
@@ -262,58 +262,92 @@ async function retrieveInfo(classStr, number) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_constants__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_constants___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_constants__);
-
-
-function courseStrToObj(courseStr, locationStr) {
+// sample courseStr = 
+function courseStrToObj(timeStr, locationStr, instructorStr = "") {
     let obj = {};
-    courseStr = courseStr.split(' ');
-    obj["startHour"] = parseInt(courseStr[1].split(':')[0]);
-    obj["startMinute"] = parseInt(courseStr[1].split(':')[1].substring(0, courseStr[1].split(':')[1].length - 2));
-    obj["startIsAM"] = courseStr[1].split(':')[1].slice(-2) == "AM" ? true : false;
-    obj["endHour"] = parseInt(courseStr[3].split(':')[0]);
-    obj["endMinute"] = parseInt(courseStr[3].split(':')[1].substring(0, courseStr[1].split(':')[1].length - 2));
-    obj["endIsAM"] = courseStr[3].split(':')[1].slice(-2) == "AM" ? true : false;
-    obj["meetsOnMonday"] = courseStr[0].indexOf("Mo") >= 0 ? true : false;
-    obj["meetsOnTuesday"] = courseStr[0].indexOf("Tu") >= 0 ? true : false;
-    obj["meetsOnWednesday"] = courseStr[0].indexOf("We") >= 0 ? true : false;
-    obj["meetsOnThursday"] = courseStr[0].indexOf("Th") >= 0 ? true : false;
-    obj["meetsOnFriday"] = courseStr[0].indexOf("Fr") >= 0 ? true : false;
-    obj["meetsOnSaturday"] = courseStr[0].indexOf("Sa") >= 0 ? true : false;
-    obj["meetsOnSunday"] = courseStr[0].indexOf("Su") >= 0 ? true : false;
+    timeStr = timeStr.split(' ');
+    console.log(`timeStr: ${timeStr}`);
+    obj["startHour"] = parseInt(timeStr[1].split(':')[0]);
+    obj["startMinute"] = parseInt(timeStr[1].split(':')[1].substring(0, timeStr[1].split(':')[1].length - 2));
+    obj["startIsAM"] = timeStr[1].split(':')[1].slice(-2) == "AM" ? true : false;
+    obj["endHour"] = parseInt(timeStr[3].split(':')[0]);
+    obj["endMinute"] = parseInt(timeStr[3].split(':')[1].substring(0, timeStr[1].split(':')[1].length - 2));
+    obj["endIsAM"] = timeStr[3].split(':')[1].slice(-2) == "AM" ? true : false;
+    obj["meetsOnMonday"] = timeStr[0].indexOf("Mo") >= 0 ? true : false;
+    obj["meetsOnTuesday"] = timeStr[0].indexOf("Tu") >= 0 ? true : false;
+    obj["meetsOnWednesday"] = timeStr[0].indexOf("We") >= 0 ? true : false;
+    obj["meetsOnThursday"] = timeStr[0].indexOf("Th") >= 0 ? true : false;
+    obj["meetsOnFriday"] = timeStr[0].indexOf("Fr") >= 0 ? true : false;
+    obj["meetsOnSaturday"] = timeStr[0].indexOf("Sa") >= 0 ? true : false;
+    obj["meetsOnSunday"] = timeStr[0].indexOf("Su") >= 0 ? true : false;
     obj["classType"] = "";
     obj["location"] = locationStr;
-    obj["instructor"] = "";
+    obj["instructor"] = instructorStr;
     return obj;
 }
 
 function courseToObj(course, col) {
+    console.log('course: ' + JSON.stringify(course));
     let d = {};
-    d["title"] = course[0];
+    d["title"] = course['title'];
     d["color"] = col;
     d["SAVE_VERSION"] = 3;
     d["DATA_CHECK"] = "69761aa6-de4c-4013-b455-eb2a91fb2b76";
-    d["meetingTimes"] = [courseStrToObj(course[2], course[3])];
+    d["meetingTimes"] = [courseStrToObj(course['time'], course['location'], course['instructor'])];
     return d;
 }
 
-function handleSchedule(html) {
+/*
+@PARAMS
+    html: the iframe document HTML
+    type: 3 types of schedules: the home menu schedule, the schedule of enrolled classes and the classes in your shopping cart 
+*/
+function handleSchedule(html, type) {
+    if (html.getElementById('win0divSTDNT_WEEK_SCHDGP$0').innerText.indexOf('Schedule') == -1) return;
     var css = `font-family: Arial,sans-serif; font-size: 11px; font-weight: normal; font-style: normal; font-variant: small-caps; color: rgb(64,111,53); background-color: rgb(222,235,181); letter-spacing: 1px; text-decoration: none; text-transform: capitalize; text-align: center; line-height: 20px; margin-left: 4px; border-width: 1px; border-top-color: rgb(142,203,98); border-bottom-color: rgb(114,175,69); border-left-color: rgb(142,203,98); border-right-color: rgb(114,175,69); border-top-style: none; border-bottom-style: solid; border-left-style: solid; border-right-style: solid; height: 20px; display: block; white-space: nowrap; cursor: pointer;`;
     var expSched = document.createElement('a');
     expSched.style.cssText = css;
     expSched.innerText = "Export Schedule";
-    var colors = ["#FFE37D", "#C8F7C5", "#E08283", "#99CCCC", "#CC99CC"];
+    var info = document.createElement('a');
+    info.innerText = "To visualize schedule, please visit https://freecollegeschedulemaker.com";
+    info.href = 'https://freecollegeschedulemaker.com';
+    info.style.cssText = '';
+    var colors = ["#FFE37D", "#C8F7C5", "#E08283", "#99CCCC", "#CC99CC", "#ffa500"];
     var classes = [];
     for (let i = 1; i < 10; i++) {
-        const course = html.getElementById('trSTDNT_WEEK_SCHD$0_row' + i.toString());
+        let course = null;
+        if (type == "enrolled") {
+            course = html.getElementById('trSTDNT_ENRL_SSVW$0_row' + i.toString());
+        } else if (type == "cart") {
+            course = html.getElementById('trSSR_REGFORM_VW$0_row' + i.toString());
+        } else {
+            course = html.getElementById('trSTDNT_WEEK_SCHD$0_row' + i.toString());
+        }
         if (course) classes.push(course);
     }
+    let courseObjs = [];
     classes = classes.map(m => m.innerText.split('\n').map(m => m.trim()).filter(m => m != ""));
-    classes = classes.map(m => courseToObj(m, colors.pop()));
     console.dir(classes);
+    let fileNameStr = "currentSchedule";
+    if (type == 'enrolled') {
+        fileNameStr = 'enrolledSchedule';
+    } else if (type == 'shoppingCart') {
+        fileNameStr = 'shoppingCartSchedule';
+    } else {
+        classes.forEach(m => {
+            let courseObj = {};
+            courseObj['title'] = m[0];
+            courseObj['time'] = m[2];
+            courseObj['location'] = m[3];
+            courseObj['instructor'] = '';
+            courseObjs.push(courseObj);
+        });
+    }
+    classes = courseObjs.map(m => courseToObj(m, colors.pop()));
+    console.dir(classes);
+    let schedule = {};
     chrome.storage.sync.set({
-        "currentSchedule": {
+        [fileNameStr]: {
             "scheduleTitle": "schedule",
             "courses": classes
         }
@@ -321,19 +355,16 @@ function handleSchedule(html) {
     chrome.storage.sync.get(items => {
         console.log("getting schedule from local storage...");
         expSched.download = "Schedule.csmo";
-        expSched.href = "data:text/plain," + JSON.stringify(items.currentSchedule);
-        console.log(items.currentSchedule);
+        expSched.id = "exportSchedule";
+        expSched.href = "data:text/plain," + JSON.stringify(items[fileNameStr]);
+        console.dir(items);
     });
-    // expSched.downlaod = JSON.stringify(chrome.storage.sync.get())
-    html.getElementById('trSTDNT_WEEK_SCHD$0_row5').appendChild(expSched);
+    if (type == "schedule") {
+        html.getElementById('trSTDNT_WEEK_SCHD$0_row5').appendChild(expSched);
+    }
 }
+
 /* harmony default export */ __webpack_exports__["a"] = (handleSchedule);
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-module.exports = {"O_RDONLY":0,"O_WRONLY":1,"O_RDWR":2,"S_IFMT":61440,"S_IFREG":32768,"S_IFDIR":16384,"S_IFCHR":8192,"S_IFBLK":24576,"S_IFIFO":4096,"S_IFLNK":40960,"S_IFSOCK":49152,"O_CREAT":512,"O_EXCL":2048,"O_NOCTTY":131072,"O_TRUNC":1024,"O_APPEND":8,"O_DIRECTORY":1048576,"O_NOFOLLOW":256,"O_SYNC":128,"O_SYMLINK":2097152,"O_NONBLOCK":4,"S_IRWXU":448,"S_IRUSR":256,"S_IWUSR":128,"S_IXUSR":64,"S_IRWXG":56,"S_IRGRP":32,"S_IWGRP":16,"S_IXGRP":8,"S_IRWXO":7,"S_IROTH":4,"S_IWOTH":2,"S_IXOTH":1,"E2BIG":7,"EACCES":13,"EADDRINUSE":48,"EADDRNOTAVAIL":49,"EAFNOSUPPORT":47,"EAGAIN":35,"EALREADY":37,"EBADF":9,"EBADMSG":94,"EBUSY":16,"ECANCELED":89,"ECHILD":10,"ECONNABORTED":53,"ECONNREFUSED":61,"ECONNRESET":54,"EDEADLK":11,"EDESTADDRREQ":39,"EDOM":33,"EDQUOT":69,"EEXIST":17,"EFAULT":14,"EFBIG":27,"EHOSTUNREACH":65,"EIDRM":90,"EILSEQ":92,"EINPROGRESS":36,"EINTR":4,"EINVAL":22,"EIO":5,"EISCONN":56,"EISDIR":21,"ELOOP":62,"EMFILE":24,"EMLINK":31,"EMSGSIZE":40,"EMULTIHOP":95,"ENAMETOOLONG":63,"ENETDOWN":50,"ENETRESET":52,"ENETUNREACH":51,"ENFILE":23,"ENOBUFS":55,"ENODATA":96,"ENODEV":19,"ENOENT":2,"ENOEXEC":8,"ENOLCK":77,"ENOLINK":97,"ENOMEM":12,"ENOMSG":91,"ENOPROTOOPT":42,"ENOSPC":28,"ENOSR":98,"ENOSTR":99,"ENOSYS":78,"ENOTCONN":57,"ENOTDIR":20,"ENOTEMPTY":66,"ENOTSOCK":38,"ENOTSUP":45,"ENOTTY":25,"ENXIO":6,"EOPNOTSUPP":102,"EOVERFLOW":84,"EPERM":1,"EPIPE":32,"EPROTO":100,"EPROTONOSUPPORT":43,"EPROTOTYPE":41,"ERANGE":34,"EROFS":30,"ESPIPE":29,"ESRCH":3,"ESTALE":70,"ETIME":101,"ETIMEDOUT":60,"ETXTBSY":26,"EWOULDBLOCK":35,"EXDEV":18,"SIGHUP":1,"SIGINT":2,"SIGQUIT":3,"SIGILL":4,"SIGTRAP":5,"SIGABRT":6,"SIGIOT":6,"SIGBUS":10,"SIGFPE":8,"SIGKILL":9,"SIGUSR1":30,"SIGSEGV":11,"SIGUSR2":31,"SIGPIPE":13,"SIGALRM":14,"SIGTERM":15,"SIGCHLD":20,"SIGCONT":19,"SIGSTOP":17,"SIGTSTP":18,"SIGTTIN":21,"SIGTTOU":22,"SIGURG":16,"SIGXCPU":24,"SIGXFSZ":25,"SIGVTALRM":26,"SIGPROF":27,"SIGWINCH":28,"SIGIO":23,"SIGSYS":12,"SSL_OP_ALL":2147486719,"SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION":262144,"SSL_OP_CIPHER_SERVER_PREFERENCE":4194304,"SSL_OP_CISCO_ANYCONNECT":32768,"SSL_OP_COOKIE_EXCHANGE":8192,"SSL_OP_CRYPTOPRO_TLSEXT_BUG":2147483648,"SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS":2048,"SSL_OP_EPHEMERAL_RSA":0,"SSL_OP_LEGACY_SERVER_CONNECT":4,"SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER":32,"SSL_OP_MICROSOFT_SESS_ID_BUG":1,"SSL_OP_MSIE_SSLV2_RSA_PADDING":0,"SSL_OP_NETSCAPE_CA_DN_BUG":536870912,"SSL_OP_NETSCAPE_CHALLENGE_BUG":2,"SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG":1073741824,"SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG":8,"SSL_OP_NO_COMPRESSION":131072,"SSL_OP_NO_QUERY_MTU":4096,"SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION":65536,"SSL_OP_NO_SSLv2":16777216,"SSL_OP_NO_SSLv3":33554432,"SSL_OP_NO_TICKET":16384,"SSL_OP_NO_TLSv1":67108864,"SSL_OP_NO_TLSv1_1":268435456,"SSL_OP_NO_TLSv1_2":134217728,"SSL_OP_PKCS1_CHECK_1":0,"SSL_OP_PKCS1_CHECK_2":0,"SSL_OP_SINGLE_DH_USE":1048576,"SSL_OP_SINGLE_ECDH_USE":524288,"SSL_OP_SSLEAY_080_CLIENT_DH_BUG":128,"SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG":0,"SSL_OP_TLS_BLOCK_PADDING_BUG":512,"SSL_OP_TLS_D5_BUG":256,"SSL_OP_TLS_ROLLBACK_BUG":8388608,"ENGINE_METHOD_DSA":2,"ENGINE_METHOD_DH":4,"ENGINE_METHOD_RAND":8,"ENGINE_METHOD_ECDH":16,"ENGINE_METHOD_ECDSA":32,"ENGINE_METHOD_CIPHERS":64,"ENGINE_METHOD_DIGESTS":128,"ENGINE_METHOD_STORE":256,"ENGINE_METHOD_PKEY_METHS":512,"ENGINE_METHOD_PKEY_ASN1_METHS":1024,"ENGINE_METHOD_ALL":65535,"ENGINE_METHOD_NONE":0,"DH_CHECK_P_NOT_SAFE_PRIME":2,"DH_CHECK_P_NOT_PRIME":1,"DH_UNABLE_TO_CHECK_GENERATOR":4,"DH_NOT_SUITABLE_GENERATOR":8,"NPN_ENABLED":1,"RSA_PKCS1_PADDING":1,"RSA_SSLV23_PADDING":2,"RSA_NO_PADDING":3,"RSA_PKCS1_OAEP_PADDING":4,"RSA_X931_PADDING":5,"RSA_PKCS1_PSS_PADDING":6,"POINT_CONVERSION_COMPRESSED":2,"POINT_CONVERSION_UNCOMPRESSED":4,"POINT_CONVERSION_HYBRID":6,"F_OK":0,"R_OK":4,"W_OK":2,"X_OK":1,"UV_UDP_REUSEADDR":4}
 
 /***/ })
 /******/ ]);

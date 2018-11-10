@@ -10,11 +10,17 @@ const run = () => {
       var iframeContent = iframeDocument.querySelectorAll("[id='MTG_INSTR$0']");
       // var shoppingCart = iframeDocument.querySelectorAll("[id='win0divDERIVED_REGFRM1_GROUP6GP']");
       var schedule = iframeDocument.querySelectorAll("[id='win0divSTDNT_WEEK_SCHDGP$0']");
-      // var enrollCart = iframeDocument.querySelectorAll("[id=''");
+      var enrollCart = iframeDocument.querySelectorAll("[id='STDNT_ENRL_SSVW$scroll$0'");
       // var iframeHTML = iframeDocument.body.innerHTML;
       if (schedule) {
         clearInterval(loop);
-        handleSchedule(iframeDocument, "schedule")
+        setInterval(() => {
+          if (iframeDocument.getElementById('exportSchedule') == null)
+            handleSchedule(iframeDocument, "schedule")
+        }, 2000)
+      }
+      else if(enrollCart) {
+        handleSchedule(iframeDocument, "enrolled")
       }
       else if (iframeContent && iframeContent.length > 0) {
         clearInterval(loop);
@@ -24,9 +30,6 @@ const run = () => {
             processPage(iframeDocument);
         }, 2000)
       }
-    }
-    else {
-      // console.log(iframeContent);
     }
   }, 1500);
 }
